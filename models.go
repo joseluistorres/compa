@@ -6,32 +6,34 @@ import (
 
 type Share struct {
   Id      string `gorethink:"id,omitempty"`
-  Link    string
-  Description  string
+  UserId  string `gorethink:"user_id" json:"user_id"`
+  Link    string `gorethink:"link" json:"link"`
+  Description  string `gorethink:"description" json:"description"`
   Created time.Time
 }
 
-func NewShare(link string, description string) *Share {
+func NewShare(user_id string, link string, description string) *Share {
   return &Share{
+    UserId: user_id,
     Link:   link,
     Description: description,
   }
 }
 
-// type Issue struct {
-//   Id      string `gorethink:"id,omitempty"`
-//   ExternalId int
-//   Subject    string `gorethink:"subject" json:"subject"`
-//   Description string `gorethink:"description" json:"description"`
-//   Status  string
-//   Created time.Time
-// }
+type User struct {
+  Id       string `gorethink:"id,omitempty"`
+  SlackUsername string `gorethink:"username" json:"username"`
+  Context  string `gorethink:"context" json:"context"`
+  Twitter   string `gorethink:"twitter" json:"twitter"`
+  Slackid   string `gorethink:"slackid" json:"slackid"`
+  // Created time.Time
+}
 
-// func NewIssue(external_id int, subject string, description string) *Issue {
-//   return &Issue{
-//     ExternalId: external_id,
-//     Subject: subject,
-//     Description: description,
-//     Status: "active",
-//   }
-// }
+func NewUser(slack_user_name string, context string, twitter string, slack_id string) *User {
+  return &User{
+    SlackUsername: slack_user_name,
+    Context: context,
+    Twitter: twitter,
+    Slackid: slack_id,
+  }
+}

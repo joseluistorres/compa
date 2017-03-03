@@ -3,6 +3,7 @@ package main
 import (
   "regexp"
   "strings"
+  "github.com/mvdan/xurls"
 )
 
 var (
@@ -51,4 +52,19 @@ func parseText(text string) string {
   text = strings.Replace(text, "&amp;", "&", -1)
 
   return text
+}
+
+func getUrl(text string) string {
+  return xurls.Relaxed.FindString(text)
+}
+
+func getUserSlackId(text string) string {
+  matches := messageRegex.FindAllStringSubmatch(text, -1)
+  get_user := ""
+  for _, sub_str := range matches {
+    if strings.HasPrefix(sub_str[1], "@U") {
+      get_user = sub_str[1]
+    }
+  }
+  return get_user
 }

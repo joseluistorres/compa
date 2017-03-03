@@ -1,11 +1,10 @@
 package main
 
-// Main entry point for the app. Handles command-line options, starts the web
+// Main entry point for the app. Handles command-line options, starts the web listener
 
 import (
   "flag"
   "fmt"
-  // "log"
   "math/rand"
   "os"
   "time"
