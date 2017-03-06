@@ -21,7 +21,9 @@ var (
 
 func init() {
   http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
+    if session == nil {
+      initDB()
+    }
     incomingText := r.PostFormValue("text")
     log.Printf("RAW TEXT: %s", incomingText)
     if incomingText != "" && r.PostFormValue("user_id") != "" {
@@ -53,6 +55,7 @@ func init() {
 
          if err != nil {
           log.Println("----------error 1--------------")
+          log.Println(err.Error())
           http.Error(w, err.Error(), http.StatusInternalServerError)
           return
          }
@@ -88,7 +91,6 @@ func init() {
 }
 
 func StartServer(port int) {
-  initDB()
   log.Printf("Starting HTTP server on %d", port)
   err := http.ListenAndServe(":"+strconv.Itoa(port), nil)
   if err != nil {
@@ -97,11 +99,11 @@ func StartServer(port int) {
 }
 
 func initDB() {
-  log.Printf("Starting RethinkDB connection...")
+  log.Printf("Starting RethinkDB connection from go...")
   var err error
 
   session, err = re.Connect(re.ConnectOpts{
-    Address: "127.0.0.1:28015",
+    Address: os.Getenv("RETHINKDB_URL_PORT"),
     Database: os.Getenv("RETHINKDB_DATABASE"),
     Username: os.Getenv("RETHINKDB_USERNAME"),
     Password: os.Getenv("RETHINKDB_PASSWORD"),
