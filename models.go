@@ -12,6 +12,8 @@ type Share struct {
   Created time.Time
 }
 
+type ShareList []Share
+
 func NewShare(user_id string, link string, description string) *Share {
   return &Share{
     UserId: user_id,
